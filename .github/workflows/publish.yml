@@ -1,0 +1,26 @@
+name: publish
+
+
+on:
+  push:
+    branches:
+      - "android"
+
+
+permissions:
+  packages: write
+
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+      
+      - name: Build and push android
+        run: |
+            sudo docker build . -t ghcr.io/lazypanda07/ubuntu-cxx23:android
+            echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login ghcr.io -u LazyPanda07 --password-stdin
+            sudo docker push ghcr.io/lazypanda07/ubuntu-cxx23:android
+          
