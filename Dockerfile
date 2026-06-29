@@ -50,7 +50,6 @@ RUN apt install -y python3 python3-pip python3-venv git zip unzip wget sudo dotn
 RUN apt upgrade -y
 RUN apt autoremove
 
-RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install build
 
 RUN wget -q "https://packages.microsoft.com/config/ubuntu/26.04/packages-microsoft-prod.deb" -O packages-microsoft-prod.deb
