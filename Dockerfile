@@ -47,7 +47,7 @@ ENV ANDROID_CMAKE_BUILD_ARGUMENTS="-DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=${
 CMD ["/bin/bash"]
 
 RUN apt update
-RUN apt install -y python3 python3-pip python3-venv git zip unzip wget sudo dotnet-sdk-10.0 openjdk-21-jdk clang ninja-build pkg-config libgtk-3-dev ninja-build netcat-openbsd redis-server
+RUN apt install -y python3 python3-pip python3-venv git zip unzip wget sudo dotnet-sdk-10.0 openjdk-21-jdk clang ninja-build pkg-config libgtk-3-dev ninja-build netcat-openbsd redis-server curl
 RUN apt upgrade -y
 RUN apt autoremove
 
