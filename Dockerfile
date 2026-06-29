@@ -44,7 +44,7 @@ ENV BOOST_TAG=boost-${BOOST_VERSION}
 CMD ["/bin/bash"]
 
 RUN apt update
-RUN apt install -y gcc g++ git zip unzip wget dotnet-sdk-10.0 make ninja-build uuid-dev netcat-openbsd redis-server sudo valgrind python3 python3-dev python3-pip python3-venv
+RUN apt install -y gcc g++ git zip unzip wget dotnet-sdk-10.0 make ninja-build uuid-dev netcat-openbsd redis-server sudo valgrind python3 python3-dev python3-pip python3-venv curl
 RUN apt upgrade -y
 
 RUN wget https://github.com/PowerShell/PowerShell/releases/latest/download/powershell_${POWERSHELL_VERSION}-1.deb_amd64.deb -O powershell.deb
