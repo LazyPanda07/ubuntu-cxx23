@@ -47,11 +47,11 @@ ARG PYTHON_VERSION
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
 ENV PATH="/usr/local/lib":${PATH}
-ENV LD_LIBRARY_PATH="/usr/lib/dotnet/host/fxr/10.0.14":"/opt/python-${PYTHON_VERSION}/lib":${LD_LIBRARY_PATH}
+ENV LD_LIBRARY_PATH="/usr/lib/dotnet/host/fxr/10.0.14":"/opt/python-${PYTHON_VERSION}/lib"
 
 ENV CC=/usr/bin/gcc-15
 ENV CXX=/usr/bin/g++-15
-ENV POWERSHELL_VERSION=7.6.3
+ENV POWERSHELL_VERSION=7.6.9
 ENV BOOST_VERSION=1.92.0
 ENV BOOST_TAG=boost-${BOOST_VERSION}
 CMD ["/bin/bash"]
