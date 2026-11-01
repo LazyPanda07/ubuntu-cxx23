@@ -10,13 +10,14 @@ ARG CMAKE_VERSION
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt update && apt install -y build-essential libssl-dev curl tar
+RUN apt update
+RUN apt install -y build-essential libssl-dev curl tar
      
 WORKDIR /tmp
 
 RUN curl -LO https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}.tar.gz
 RUN tar -xvzf cmake-${CMAKE_VERSION}.tar.gz
-RUN cd cmake-${CMAKE_VERSION} && ./bootstrap --prefix=/opt/cmake-${CMAKE_VERSION} && make -j $(nproc) && make install
+RUN cd cmake-${CMAKE_VERSION} && ./bootstrap --prefix=/opt/cmake && make -j $(nproc) && make install
 
 FROM ubuntu:26.04 AS python-builder
 
@@ -38,16 +39,13 @@ RUN cd python_source/cpython-${PYTHON_VERSION} && ./configure --enable-shared --
 
 FROM ubuntu:26.04 AS deploy
 
-ARG CMAKE_VERSION
 ARG PYTHON_MAJOR_VERSION
 ARG PYTHON_MINOR_VERSION
-ARG PYTHON_PATCH
-ARG PYTHON_VERSION
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
 ENV PATH="/usr/local/lib":${PATH}
-ENV LD_LIBRARY_PATH="/usr/lib/dotnet/host/fxr/10.0.14":"/opt/python-${PYTHON_VERSION}/lib"
+ENV LD_LIBRARY_PATH="/usr/lib/dotnet/host/fxr/10.0.14":"/opt/python/lib"
 
 ENV CC=/usr/bin/gcc-15
 ENV CXX=/usr/bin/g++-15
@@ -67,13 +65,15 @@ RUN rm -rf powershell.deb
 
 RUN git clone https://github.com/boostorg/boost.git -b ${BOOST_TAG} --recursive
 
-COPY --from=cmake-builder /opt/cmake-${CMAKE_VERSION} /opt/cmake-${CMAKE_VERSION}
-COPY --from=python-builder /opt/python /opt/python-${PYTHON_VERSION}
+RUN dotnet publish || true
 
-RUN ln -s /opt/cmake-${CMAKE_VERSION}/bin/cmake /usr/bin/cmake
+COPY --from=cmake-builder /opt/cmake /opt/cmake
+COPY --from=python-builder /opt/python /opt/python
+
+RUN ln -s /opt/cmake/bin/cmake /usr/bin/cmake
 RUN update-alternatives --install /usr/bin/python3 python3 $(readlink -f $(which python3)) 0
-RUN update-alternatives --install /usr/bin/python3 python3 /opt/python-${PYTHON_VERSION}/bin/python${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION} 1
-RUN update-alternatives --install /usr/bin/pip3 pip3 /opt/python-${PYTHON_VERSION}/bin/pip${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION} 1
+RUN update-alternatives --install /usr/bin/python3 python3 /opt/python/bin/python${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION} 1
+RUN update-alternatives --install /usr/bin/pip3 pip3 /opt/python/bin/pip${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION} 1
 RUN update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install build
@@ -81,5 +81,3 @@ RUN ln -s $(which python3) /usr/bin/python
 
 RUN cd boost && mkdir build && cd build && cmake -DBOOST_STACKTRACE_ENABLE_BACKTRACE=ON -G "Ninja" .. && cmake --build . -j && cmake --install .
 RUN rm -rf boost
-
-RUN dotnet publish || true
