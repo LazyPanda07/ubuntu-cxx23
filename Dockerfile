@@ -46,6 +46,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
 ENV PATH="/usr/local/lib":${PATH}
 ENV LD_LIBRARY_PATH="/usr/lib/dotnet/host/fxr/10.0.14":"/opt/python/lib"
+ENV DOTNET_CLI_HOME=/tmp/dotnet_cli_home
+ENV DOTNET_NOLOGO=true
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=true
 
 ENV CC=/usr/bin/gcc-15
 ENV CXX=/usr/bin/g++-15
@@ -64,6 +67,9 @@ RUN apt install ./powershell.deb
 RUN rm -rf powershell.deb
 
 RUN git clone https://github.com/boostorg/boost.git -b ${BOOST_TAG} --recursive
+
+RUN mkdir -p ${DOTNET_CLI_HOME}
+RUN chmod 1777 ${DOTNET_CLI_HOME}
 
 RUN dotnet publish || true
 
