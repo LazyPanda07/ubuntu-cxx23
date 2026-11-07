@@ -44,7 +44,7 @@ ARG PYTHON_MINOR_VERSION
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
-ENV PATH="/usr/local/lib":${PATH}
+ENV PATH="/usr/local/lib":"/opt/python/bin":${PATH}
 ENV LD_LIBRARY_PATH="/usr/lib/dotnet/host/fxr/10.0.14":"/opt/python/lib"
 ENV DOTNET_CLI_HOME=/tmp/dotnet_cli_home
 ENV DOTNET_NOLOGO=true
