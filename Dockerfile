@@ -72,8 +72,8 @@ RUN rm -rf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
 
 ENV ANDROID_HOME=/Android/Sdk
 ENV PATH=${FLUTTER_BIN_PATH}:${ANDROID_HOME}:${ANDROID_HOME}/cmdline-tools:${ANDROID_HOME}/platforms:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platforms/${ANDROID_VERSION}:${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin:${PATH}
-ENV ANDROID_CROSS_COMPILER_CC=${NDK_PATH}/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
-ENV ANDROID_CROSS_COMPILER_CXX=${NDK_PATH}/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++
+ENV ANDROID_CROSS_COMPILER_CC=${NDK_PATH}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android36-clang
+ENV ANDROID_CROSS_COMPILER_CXX=${NDK_PATH}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android36-clang++
 
 RUN sdkmanager "platform-tools" "${SDK_INSTALL_NAME}" "${BUILD_TOOLS_NAME}"
 
